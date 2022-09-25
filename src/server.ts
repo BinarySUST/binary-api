@@ -9,7 +9,6 @@ import httpStatus from 'http-status'
 // load all env variables
 dotenv.config()
 
-
 import { APP_PORT, APP_PREFIX_PATH, IS_TEST } from './config'
 import { morganSuccessHandler, morganErrorHandler } from './config/morgan'
 import ApiError from './utils/apiError'
@@ -39,13 +38,8 @@ app.use(cors())
 
 app.use(morgan('dev'))
 
-
 app.get('/', (_req, res) => {
-    logger.info("Info")
-    logger.warn("warn ")
-    logger.error("error")
-    new Error("something went wrong")
-    res.status(200).send('Healthy')
+    res.status(200).json({ msg: 'Healthy' })
 })
 
 //   app.use(APP_PREFIX_PATH, routes)
@@ -61,14 +55,13 @@ app.use(errorConverter)
 // handle error
 app.use(errorHandler)
 
-
 export async function start() {
     try {
         // await connect()
         app.listen(APP_PORT, () => {
-            console.log(`REST API on localhost:${APP_PORT + APP_PREFIX_PATH}`)
+            logger.info(`REST API on localhost:${APP_PORT + APP_PREFIX_PATH}`)
         })
     } catch (e) {
-        console.error(e)
+        logger.error(e)
     }
 }

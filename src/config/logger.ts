@@ -1,7 +1,24 @@
 import { format, createLogger, transports } from 'winston'
+import DailyRotateFile from 'winston-daily-rotate-file';
 import { IS_PRODUCTION } from '.'
 
-const { combine, colorize, splat, printf, timestamp, errors, json } = format
+const { combine, colorize, splat, printf, timestamp, errors } = format
+
+const transport: DailyRotateFile = new DailyRotateFile({
+    level: 'info',
+    dirname: 'log',
+    filename: 'application-%DATE%',
+    extension: '.log',
+    datePattern: 'YYYY-MM-DD-HH',
+    zippedArchive: true,
+    maxSize: '5m',
+    maxFiles: '14d'
+});
+
+transport.on('rotate', function (oldFilename, newFilename) {
+    // do something fun
+    console.log("rotate", oldFilename, newFilename)
+});
 
 const enumerateErrorFormat = format((info) => {
     if (info instanceof Error) {
@@ -39,15 +56,16 @@ const prodLogger = createLogger({
         timestamp(),
         splat(),
         errors({ stack: true }),
-        json(),
+        prodFormat,
     ),
     defaultMeta: { service: 'binary-api' },
     transports: [
         new transports.Console({ stderrLevels: ['error'] }),
         // - Write all logs error (and below) to `quick-start-error.log`.
-        new transports.File({ filename: 'error.log', level: 'error' }),
+        // new transports.File({ filename: 'error.log', level: 'error' }),
         // - Write to all logs with level `info` and below to `combined.log`.
-        new transports.File({ filename: 'combined.log' })
+        // new transports.File({ filename: 'combined.log' }),
+        transport
     ],
 })
 
