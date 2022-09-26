@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
-import { APP_PORT, DB, DB_URI, IS_TEST } from '../config'
-import { app } from '../server'
+import { DB, DB_URI, IS_TEST } from '../config'
 import logger from './logger'
 
 
@@ -45,4 +44,12 @@ mongoose.connection.on('error', (err) => {
 // When the connection is disconnected
 mongoose.connection.on('disconnected', () => {
     logger.info('Mongoose default connection disconnected')
+})
+
+// If the Node process ends, close the Mongoose connection (ctrl + c)
+process.on('SIGINT', () => {
+    mongoose.connection.close(() => {
+        logger.info('Mongoose default connection disconnected through app termination')
+        process.exit(0)
+    })
 })
