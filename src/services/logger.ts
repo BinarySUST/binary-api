@@ -1,6 +1,6 @@
 import { format, createLogger, transports } from 'winston'
 import DailyRotateFile from 'winston-daily-rotate-file';
-import { IS_PRODUCTION } from '.'
+import { IS_PRODUCTION } from '../config'
 
 const { combine, colorize, splat, printf, timestamp, errors } = format
 

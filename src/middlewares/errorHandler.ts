@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import httpStatus from 'http-status'
-import logger from '../config/logger'
+
+import logger from '../services/logger'
 import ApiError from '../utils/apiError'
 import { IS_PRODUCTION, IS_TEST } from '../config'
 

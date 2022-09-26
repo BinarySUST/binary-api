@@ -13,7 +13,8 @@ import { APP_PORT, APP_PREFIX_PATH, IS_TEST } from './config'
 import { morganSuccessHandler, morganErrorHandler } from './config/morgan'
 import ApiError from './utils/apiError'
 import { errorConverter, errorHandler } from './middlewares/errorHandler'
-import logger from './config/logger'
+import logger from './services/logger'
+import { connectDB } from './services/db'
 // import { connect } from './utils/db'
 
 export const app = express()
@@ -57,7 +58,8 @@ app.use(errorHandler)
 
 export async function start() {
     try {
-        // await connect()
+        await connectDB()
+        logger.info('Database connected!!!')
         app.listen(APP_PORT, () => {
             logger.info(`REST API on localhost:${APP_PORT + APP_PREFIX_PATH}`)
         })
