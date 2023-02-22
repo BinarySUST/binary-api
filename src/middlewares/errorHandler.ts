@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import httpStatus from 'http-status'
 
 import logger from '../services/logger'
@@ -9,7 +8,7 @@ export const errorConverter = (err: any, _req: any, _res: any, next: any) => {
     let error = err
     if (!(error instanceof ApiError)) {
         const statusCode =
-            error.statusCode || error instanceof mongoose.Error ? httpStatus.BAD_REQUEST : httpStatus.INTERNAL_SERVER_ERROR
+            error.statusCode 
         const message = error.message || httpStatus[statusCode]
         error = new ApiError(statusCode, message as string, true, err.stack)
     }

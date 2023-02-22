@@ -1,6 +1,8 @@
-import mongoose from 'mongoose'
+import { PrismaClient } from '@prisma/client'
 import { DB, DB_URI, IS_TEST } from '../config'
 import logger from './logger'
+
+const prisma = new PrismaClient()
 
 
 let dbURI: string
@@ -25,31 +27,32 @@ const options = {
 export async function connectDB(URI = dbURI, dbOptions = options) {
     logger.debug(URI)
     logger.info('connecting to database...')
-    return mongoose
-        .connect(URI, dbOptions)
+
+    // return mongoose
+    //     .connect(URI, dbOptions)
 }
 
 
 // CONNECTION EVENTS
 // When successfully connected
-mongoose.connection.on('connected', () => {
-    logger.debug('Mongoose default connection open to ' + dbURI)
-})
+// mongoose.connection.on('connected', () => {
+//     logger.debug('Mongoose default connection open to ' + dbURI)
+// })
 
 // If the connection throws an error
-mongoose.connection.on('error', (err) => {
-    logger.error('Mongoose default connection error: ' + err)
-})
+// mongoose.connection.on('error', (err) => {
+//     logger.error('Mongoose default connection error: ' + err)
+// })
 
 // When the connection is disconnected
-mongoose.connection.on('disconnected', () => {
-    logger.info('Mongoose default connection disconnected')
-})
+// mongoose.connection.on('disconnected', () => {
+//     logger.info('Mongoose default connection disconnected')
+// })
 
 // If the Node process ends, close the Mongoose connection (ctrl + c)
 process.on('SIGINT', () => {
-    mongoose.connection.close(() => {
-        logger.info('Mongoose default connection disconnected through app termination')
-        process.exit(0)
-    })
+    // mongoose.connection.close(() => {
+    //     logger.info('Mongoose default connection disconnected through app termination')
+    //     process.exit(0)
+    // })
 })
