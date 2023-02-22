@@ -18,3 +18,4 @@ export const morganErrorHandler = morgan(errorResponseFormat, {
     skip: (_req, res) => res.statusCode < 400,
     stream: { write: (message) => logger.error(message.trim()) },
 })
+// something
